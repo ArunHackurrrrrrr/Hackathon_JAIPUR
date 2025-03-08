@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Portal</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    
+    <!-- Icons (FontAwesome) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* 🌌 Background Image */
+        body {
+            background: url('/static/images/gpss.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: rgba(30, 30, 45, 0.95);
+            color: white;
+            padding: 20px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+        .sidebar a:hover, .sidebar .active {
+            background: #ff9000;
+        }
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ff9000;
+            margin-bottom: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(41, 41, 41, 0.85);
+            color: white;
+            padding: 10px;
+            border-bottom: 3px solid #ff9000;
+        }
+        .navbar .welcome-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* User Details Container */
+        .user-details-container {
+            width: 220px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Dashboard & Attendance Boxes */
+        .dashboard-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .dashboard-card, .attendance-box {
+            background: linear-gradient(135deg, #1e1e2d, #292929);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 5px 15px rgba(255, 144, 0, 0.3);
+            width: 200px;
+        }
+
+        /* Mark Present Button */
+        .mark-present-btn {
+            background-color: #ff9000;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                text-align: center;
+                padding: 10px;
+            }
+            .sidebar a span {
+                display: none;
+            }
+            .main-content {
+                margin-left: 70px;
+            }
+            .dashboard-container {
+                flex-direction: column;
+                align-items: center;
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">Admin Portal</div>
+        <a href="#" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+        <a href="#"><i class="fas fa-users"></i> <span>Users</span></a>
+        <a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a>
+        <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <span class="navbar-brand welcome-text">Welcome, Admin</span>
+            </div>
+        </nav>
+
+        <!-- User Details Container -->
+        <div class="user-details-container">
+            <h4>User Details</h4>
+            <p><strong>ID:</strong> <span id="user-detail-id">{{data.userName}}</span></p>
+            <p><strong>Name:</strong> <span id="user-detail-name">{user.userMail}</span></p>
+            <p><strong>Status:</strong> <span id="user-detail-status">N/A</span></p>
+            <p><strong>Time:</strong> <span id="user-detail-time">N/A</span></p>
+        </div>
+
+        <!-- Dashboard & Attendance Boxes -->
+        <div class="dashboard-container">
+            <div class="dashboard-card">
+                <h4>Total Users</h4>
+                <p>📊 {{ udata.userUid }}</p>
+            </div>
+            <div class="dashboard-card">
+                <h4>Active Users</h4>
+                <p>🟢 NIL</p>
+            </div>
+            <!-- Attendance Box -->
+            <form class="attendance-box" id="attendance-form" action="/web/adminsearch" method="POST">
+                {% csrf_token %}
+                <h4>Attendance</h4>
+                <input type="text" id="user-id" class="form-control mb-2" name="usermail" placeholder="Enter User Email" required>
+                <button type="submit" class="mark-present-btn">Search</button>
+            </form>
+            
+            
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function markPresent() {
+            let userIdInput = document.getElementById("user-id").value;
+            let userDetailId = document.getElementById("user-detail-id");
+            let userDetailName = document.getElementById("user-detail-name");
+            let userDetailStatus = document.getElementById("user-detail-status");
+            let userDetailTime = document.getElementById("user-detail-time");
+
+            if (userIdInput.trim() === "") {
+                alert("❌ Please enter a User ID!");
+            } else {
+                let currentTime = new Date().toLocaleTimeString();
+                userDetailId.innerHTML = userIdInput;
+                userDetailName.innerHTML = "John Doe"; // Placeholder name
+                userDetailStatus.innerHTML = "✅ Present";
+                userDetailTime.innerHTML = currentTime;
+            }
+        }
+    </script>
+
+</body>
+</html>

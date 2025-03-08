@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Attendance Dashboard</title>
+    <!-- <img src="https://example.com/images/icon.png" alt="User Icon">
+
+    <img src="images/map.png" alt="Map" class="img-fluid"> -->
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* 🌑 Dark Modern Theme */
+        body {
+            background: #160000;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 📌 Navbar Styling */
+        .navbar {
+            background: linear-gradient(135deg, #ffffff, #ffffff);
+            padding: 12px 20px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-link {
+            color: rgb(77, 9, 9) !important;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ff5900 !important;
+        }
+
+        /* 🔴 Logout Button */
+        .logout-btn {
+            background-color: #05640c;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff2222;
+            transform: scale(1.05);
+        }
+
+        /* 📊 Progress Bars */
+        .progress {
+            height: 30px;
+            border-radius: 15px;
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            font-weight: bold;
+            line-height: 30px;
+            transition: width 1.2s ease-in-out;
+        }
+
+        /* 🎨 Stylish Cards */
+        .card {
+            background: #1c1c1c;
+            color: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0px 5px 15px rgba(255, 144, 0, 0.3);
+        }
+
+        /* 📍 Map Section with White Background */
+        .map-container img {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(255, 144, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+            padding: 10px; 
+        }
+
+        .map-container img:hover {
+            transform: scale(1.02);
+        }
+
+        /* 🌊 Animated Curved Footer */
+        .footer {
+            position: relative;
+            background: linear-gradient(to right, #ff8800, #f1aa7b);
+            color: rgb(16, 1, 1);
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .footer-wave {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: url('https://raw.githubusercontent.com/chrisssycollins/css-wavy-footer/main/wave.svg') repeat-x;
+            animation: waveAnimation 5s linear infinite;
+        }
+
+        @keyframes waveAnimation {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 100px; }
+        }
+
+    </style>
+</head>
+<body>
+    {% load static %}
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="\static\images\icon.png" class="img-fluid me-2" alt="User Icon" style="width: 40px; height: 40px;">
+                <span class="text-black fw-bold">User ID</span>
+            </div>
+            <div>
+                {% if Role == 'admin' %}
+                <a href="/web/adminp" class="nav-link d-inline-block me-3">Admin</a>
+                {% endif %}
+                <button class="btn logout-btn">Log Out</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row text-center">
+            <!-- Time Percentage -->
+            <div class="col-md-6">
+                <h5>Time Percentage</h5>
+                <div class="progress">
+                    <div id="timeProgress" class="progress-bar bg-warning" style="width: 0%">0%</div>
+                </div>
+            </div>
+
+            <!-- Attendance Percentage -->
+            <div class="col-md-6">
+                <h5>Attendance Percentage</h5>
+                <div class="progress">
+                    <div id="attendanceProgress" class="progress-bar bg-success" style="width: 0%">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📍 Map Section -->
+        <div class="map-container mt-4 text-center">
+            <img src="\static\images\map.png" alt="Map" class="img-fluid"> <!-- Fixed image path -->
+        </div>
+
+        <!-- 📞 Contact Info -->
+        <div class="contact-section row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <strong>Attendance Staff</strong>
+                </div>
+                <div class="card mt-3">
+                    <strong>Contact Number:</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌊 Animated Footer -->
+    <footer class="footer mt-5">
+        <div class="footer-wave"></div>
+        <p>&copy; 2025 Attendance Dashboard. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 📊 JavaScript to Update Progress Bars with Animation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let timePercentage = 20;  
+            let attendancePercentage = 67;  
+
+            let timeBar = document.getElementById("timeProgress");
+            let attendanceBar = document.getElementById("attendanceProgress");
+
+            setTimeout(() => {
+                timeBar.style.width = timePercentage + "%";
+                timeBar.textContent = timePercentage + "%";
+
+                attendanceBar.style.width = attendancePercentage + "%";
+                attendanceBar.textContent = attendancePercentage + "%";
+            }, 500);
+        });
+    </script>
+
+</body>
+</html>

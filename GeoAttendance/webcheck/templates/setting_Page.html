@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Settings</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+
+    <style>
+        /* Background Styling */
+        body {
+            background: rgba(238, 200, 200, 0.9);
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Settings Box */
+        .settings-box {
+            width: 400px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Buttons */
+        .settings-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .submit-btn {
+            background-color: #ff9000;
+            color: white;
+            margin-top: 10px;
+        }
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .settings-box {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Settings Box -->
+    <div class="settings-box">
+        <h4>Update Location</h4>
+
+        <label for="latitude" class="form-label mt-2">Latitude</label>
+        <input type="text" id="latitude" class="form-control" value="37.7749" readonly>
+
+        <label for="longitude" class="form-label mt-2">Longitude</label>
+        <input type="text" id="longitude" class="form-control" value="-122.4194" readonly>
+
+        <button class="settings-btn edit-btn" onclick="enableEditing()">Edit</button>
+        <button class="settings-btn submit-btn" onclick="submitLocation()" disabled>Submit</button>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function enableEditing() {
+            document.getElementById("latitude").removeAttribute("readonly");
+            document.getElementById("longitude").removeAttribute("readonly");
+            document.querySelector(".submit-btn").removeAttribute("disabled");
+        }
+
+        function submitLocation() {
+            let lat = document.getElementById("latitude").value;
+            let long = document.getElementById("longitude").value;
+
+            if (lat.trim() === "" || long.trim() === "") {
+                alert("❌ Please enter valid Latitude and Longitude!");
+                return;
+            }
+
+            alert(`✅ Location Updated!\nLatitude: ${lat}\nLongitude: ${long}`);
+            document.getElementById("latitude").setAttribute("readonly", true);
+            document.getElementById("longitude").setAttribute("readonly", true);
+            document.querySelector(".submit-btn").setAttribute("disabled", true);
+        }
+    </script>
+
+</body>
+</html>
