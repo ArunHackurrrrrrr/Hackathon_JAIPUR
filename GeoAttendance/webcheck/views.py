@@ -98,48 +98,48 @@ def finduser(request):
 
 
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import userData
-from .serializers import userSerializer
-from .serializers import LoginSerializer
-class userApi(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self,request):
-        queryset = userData.objects.all()
-        serializer = userSerializer(queryset,many = True)
-        return Response({
-            "statu": True,
-            "data":serializer.data
-        })
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from .models import userData
+# # from .serializers import userSerializer
+# # from .serializers import LoginSerializer
+# class userApi(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def get(self,request):
+#         queryset = userData.objects.all()
+#         serializer = userSerializer(queryset,many = True)
+#         return Response({
+#             "statu": True,
+#             "data":serializer.data
+#         })
     
 
-class LoginAPI(APIView):
-    def post(self,request):
-        data = request.data
-        serializer = LoginSerializer(data= data)
-        if not serializer.is_valid():
+# class LoginAPI(APIView):
+#     def post(self,request):
+#         data = request.data
+#         serializer = LoginSerializer(data= data)
+#         if not serializer.is_valid():
         
-            return Response({
-            "status":False,
-            "data":serializer.errors
-        })
-        username = serializer.data['username']
-        password = serializer.data['password']
-        print(username,password)
+#             return Response({
+#             "status":False,
+#             "data":serializer.errors
+#         })
+#         username = serializer.data['username']
+#         password = serializer.data['password']
+#         print(username,password)
 
-        user_obj = authenticate(username=username,password= password)
-        if user_obj:
-            token ,_ =Token.objects.get_or_create(user= user_obj)
-            print(token.token)
-            return Response({
-                "status":True,
-                "data":{'token':str(token)}
-            })
+#         user_obj = authenticate(username=username,password= password)
+#         if user_obj:
+#             token ,_ =Token.objects.get_or_create(user= user_obj)
+#             print(token.token)
+#             return Response({
+#                 "status":True,
+#                 "data":{'token':str(token)}
+#             })
 
-        return Response({
-            "status":False,
-            "data":{},
-            "message":"invalid credentials"
-        })
+#         return Response({
+#             "status":False,
+#             "data":{},
+#             "message":"invalid credentials"
+#         })
     
